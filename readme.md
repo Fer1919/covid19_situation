@@ -21,5 +21,5 @@ Para levantar el proyecto, debes seguir los siguientes pasos
 2. Instala las dependencias usando `npm install`
 3. Levanta el servidor usando `npm run watch`
 4. Accede desde tu navegador a [http://localhost:3000/covid19](http://localhost:3000/covid19)
-5. Inicia sesión con cualquuiera de las cuentas listadas en `db/users.json`
+5. Inicia sesión con cualquiera de las cuentas listadas en `db/users.json`
 
