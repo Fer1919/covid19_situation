@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const path = require('path')
 const app = express()
+const cors = require('cors')
 
 const options = {
     inflate: true,
@@ -10,6 +11,7 @@ const options = {
 }
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json(options))
+app.use(cors())
 
 const {authApi} = require('./routes/auth')
 const {userPostApi} = require('./routes/posts')

@@ -1,5 +1,11 @@
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IkxlYW5uZSBHcmFoYW0iLCJ1c2VybmFtZSI6IkJyZXQiLCJpYXQiOjE1OTQ4NTg5Mzh9.Uz8n0LL58qYnb2Qzp0QdFRnNdme0cyDnGicZy_8zegQ
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IkxlYW5uZSBHcmFoYW0iLCJ1c2VybmFtZSI6IkJyZXQiLCJpYXQiOjE1OTY1MDY4OTN9.KDSlP9ALDLvyy0Jfz52x8NePUejWOV_mZS6cq4-JZXs 
 GET http://localhost:3000/api/posts HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+#########
+GET http://localhost:3000/api/albums HTTP/1.1
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{token}}
@@ -17,9 +23,15 @@ Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{token}}
 
+#########
+GET http://localhost:3000/api/confirmed HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
 
 #########
-GET http://localhost:3000/api/chile HTTP/1.1
+GET http://localhost:3000/api/countries/chile HTTP/1.1
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{token}}

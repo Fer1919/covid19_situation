@@ -3,10 +3,10 @@ const COVIDAPI = 'https://covid2019-api.herokuapp.com'
 
 class Covid19 {
     all() {
-         return axios.get(`${COVIDAPI}/v2/current`).then(r => r.data)
+        return axios.get(`${COVIDAPI}/v2/current`).then(r => r.data)
     }
-    chile() {
-        return axios.get(`${COVIDAPI}/v2/country/chile`)
+    countries(country) {
+        return axios.get(`${COVIDAPI}/v2/country/${country}`)
             .then(r => r.data)
             .catch(e => console.log(e))
     }
