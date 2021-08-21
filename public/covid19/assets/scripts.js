@@ -63,8 +63,13 @@ function getInfoByCountry(country) {
     dataType: "json",
     success: function (response) {
       mountModal(response.data)
-      mountCountryChart(response.data)
-      showModal()
+      if(response.data.confirmed == undefined){
+        NoData("Sin datos para mostrar")
+        showModal()
+      }else{
+        mountCountryChart(response.data)
+        showModal()
+      } 
     }
   });
 }
@@ -73,6 +78,11 @@ function showModal() {
   let modal = document.getElementById('myModal')
   let myModal = new bootstrap.Modal(modal)
   myModal.show()
+}
+
+function NoData (mensaje) {
+  document.getElementsByClassName("modal-body")[0].innerHTML = `<h5 class="text-center">${mensaje}</h5>`
+  document.getElementsByClassName("modal-title")[0].innerHTML = "País"
 }
 
 function mountModal(data) {
