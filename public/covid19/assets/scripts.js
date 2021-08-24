@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
   getData()
   if(localStorage.getItem('jwt')) {
-    $('.navbar-nav').append(`<a class="nav-link" style="cursor: pointer;" id="chile" href="./situation.html">Situacion Chile</a>`)
-    $('.navbar-nav').append(`<a class="nav-link" style="cursor: pointer;" onclick="logout()" id="logout">Cerrar sesión</a>`)
+    $('.navbar-nav').append(`<li class="nav-item"> <a class="nav-link" style="cursor: pointer;" id="chile" href="./situation.html">Situacion Chile</a></li>`)
+    $('.navbar-nav').append(`<li class="nav-item"><a class="nav-link" style="cursor: pointer;" onclick="logout()" id="logout">Cerrar sesión</a></li>`)
   } else {
-    $('.navbar-nav').append(`<a class="nav-link" style="cursor: pointer;" onclick="login()" id="login">Iniciar Sesión</a>`)
+    $('.navbar-nav').append(`<li class="nav-item"><a class="nav-link" style="cursor: pointer;" onclick="login()" id="login">Iniciar Sesión</a></li>`)
   }
 })
 

@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
   getSituation()
   if(localStorage.getItem('jwt')) {
-    $('.navbar-nav').append(`<a class="nav-link" style="cursor: pointer;" id="chile" href="./situation.html">Situacion Chile</a>`)
-    $('.navbar-nav').append(`<a class="nav-link" style="cursor: pointer;" onclick="logout()" id="logout">Cerrar sesión</a>`)
+    $('.navbar-nav').append(`<li class="nav-item"><a class="nav-link" style="cursor: pointer;" id="chile" href="./situation.html">Situacion Chile</a></li>`)
+    $('.navbar-nav').append(`<li class="nav-item"><a class="nav-link" style="cursor: pointer;" onclick="logout()" id="logout">Cerrar sesión</a></li>`)
   } else {
     window.location.replace('http://localhost:3000/covid19')
   }
