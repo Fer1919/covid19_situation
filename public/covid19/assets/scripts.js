@@ -1,5 +1,3 @@
-
-
 document.addEventListener('DOMContentLoaded', function() {
   getData()
   if(localStorage.getItem('jwt')) {
@@ -25,24 +23,6 @@ const login = () => {
 const logout = () => {
   localStorage.clear()
   window.location.replace('http://localhost:3000/covid19')
-}
-
-const getToken = async () => {
-    let user = $("#email").val()
-    let pass = $("#pass").val()
-  try {
-      const response = await fetch('http://localhost:3000/api/login',
-      {
-          method:'POST',
-          body: JSON.stringify({email:user,password:pass})
-      })
-      const { token } = await response.json();
-      localStorage.setItem('jwt',token);
-      return token;
-  }
-  catch (err) {
-      console.log(`Error: ${err}`);
-  }
 }
 
 function getData() {
@@ -155,7 +135,6 @@ function getToken() {
       alert('Usuario y/o password incorrectos');
       $("#email").val("")
       $("#pass").val("")
-
   });
 }
 
@@ -174,8 +153,6 @@ function getData() {
     }
   });
 }
-
-
 
 const loaderShow = () => {
   $('body').prepend(`
