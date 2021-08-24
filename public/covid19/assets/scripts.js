@@ -1,3 +1,5 @@
+
+
 document.addEventListener('DOMContentLoaded', function() {
   getData()
   if(localStorage.getItem('jwt')) {
@@ -15,17 +17,50 @@ $('#tbody').click(function(event) {
   }
 })
 
-function login() {
+const login = () => {
   openLogInModal()
   showModal()
 }
 
-function logout() {
+const logout = () => {
   localStorage.clear()
   window.location.replace('http://localhost:3000/covid19')
 }
 
-function openLogInModal() {
+const getToken = async () => {
+    let user = $("#email").val()
+    let pass = $("#pass").val()
+  try {
+      const response = await fetch('http://localhost:3000/api/login',
+      {
+          method:'POST',
+          body: JSON.stringify({email:user,password:pass})
+      })
+      const { token } = await response.json();
+      localStorage.setItem('jwt',token);
+      return token;
+  }
+  catch (err) {
+      console.log(`Error: ${err}`);
+  }
+}
+
+function getData() {
+  loaderShow()
+  $.ajax({
+    type: "get",
+    url: 'http://localhost:3000/api/total',
+    dataType: "json",
+    success: function(response) {
+      data = response.data
+      mountChart(data)
+      mountTable(data)
+      loaderHide()
+    }
+  });
+}
+
+function openLogInModal(){
   let modal = `
   <div class="modal" tabindex="-1" id="myModal">
     <div class="modal-dialog">
@@ -56,12 +91,12 @@ function openLogInModal() {
   $('#modal').html(modal)
 }
 
-function getInfoByCountry(country) {
+const getInfoByCountry = (country) =>{
   $.ajax({
     type: "get",
     url: "http://localhost:3000/api/countries/" + country,
     dataType: "json",
-    success: function (response) {
+    success:  (response) =>{
       mountModal(response.data)
       if(response.data.confirmed == undefined){
         NoData("Sin datos para mostrar")
@@ -74,7 +109,7 @@ function getInfoByCountry(country) {
   });
 }
 
-function showModal() {
+const showModal = () =>{
   let modal = document.getElementById('myModal')
   let myModal = new bootstrap.Modal(modal)
   myModal.show()
@@ -85,7 +120,8 @@ function NoData (mensaje) {
   document.getElementsByClassName("modal-title")[0].innerHTML = "País"
 }
 
-function mountModal(data) {
+
+const mountModal = (data) =>{
   let modal = `
   <div class="modal" tabindex="-1" id="myModal">
     <div class="modal-dialog">
@@ -140,7 +176,8 @@ function getData() {
 }
 
 
-function loaderShow() {
+
+const loaderShow = () => {
   $('body').prepend(`
   <div id="shadow" style="z-index: 15; width: 100vw; height: 100vh; position: absolute; background-color: black; opacity: 0.7;"></div>
   <div id="spinner" style="z-index: 20; position: absolute; top: 50%; left: 50%;">
@@ -151,61 +188,61 @@ function loaderShow() {
   `)
 }
 
-function loaderHide() {
+const loaderHide = () =>{
   $('#spinner').fadeOut()
   $('#shadow').fadeOut()
 }
 
-function mountChart(data) {
-  let confirmed = _.filter(data, function(d) { 
+const mountChart = (data) => {
+  let confirmed = _.filter(data, (d) => { 
     if(d.confirmed > 1400000) {
       return d
     }
   })
 
-  Highcharts.chart('chart', {
-    chart: {
-      type: 'column'
-    },
-    title: {
-      text: 'Resumen de contagios'
-    },
-    subtitle: {
-      text: 'Datos actualizados'
-    },
-    xAxis: {
-      categories: _.map(confirmed, function(c) { return c.location }),
-      crosshair: true
-    },
-    yAxis: {
-      min: 0,
+    Highcharts.chart('chart', {
+      chart: {
+        type: 'column'
+      },
       title: {
-        text: 'Cantidad de personas'
-      }
-    },
-    series: [
-      {
-        name: 'Activos',
-        data: _.map(confirmed, function(c) { return c.active })
+        text: 'Resumen de contagios'
       },
-      {
-        name: 'Confirmados',
-        data: _.map(confirmed, function(c) { return c.confirmed })
+      subtitle: {
+        text: 'Datos actualizados'
       },
-      {
-        name: 'Muertos',
-        data: _.map(confirmed, function(c) { return c.deaths })
+      xAxis: {
+        categories: _.map(confirmed, (c)=> { return c.location }),
+        crosshair: true
       },
-      {
-        name: 'Recuperados',
-        data: _.map(confirmed, function(c) { return c.recovered })
-      }
-    ]
-  })
+      yAxis: {
+        min: 0,
+        title: {
+          text: 'Cantidad de personas'
+        }
+      },
+      series: [
+        {
+          name: 'Activos',
+          data: _.map(confirmed, (c)=> { return c.active })
+        },
+        {
+          name: 'Confirmados',
+          data: _.map(confirmed, (c)=> { return c.confirmed })
+        },
+        {
+          name: 'Muertos',
+          data: _.map(confirmed, (c) => { return c.deaths })
+        },
+        {
+          name: 'Recuperados',
+          data: _.map(confirmed, (c) => { return c.recovered })
+        }
+      ]
+    })
 }
 
-function mountTable(data) {
-  _.forEach(data, function(d) {
+const mountTable = (data) => {
+  _.forEach(data, (d) => {
     $('#tbody').append(`
       <tr>
         <td>${d.location}</td>
@@ -223,7 +260,8 @@ function numberconpunto(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
-function mountCountryChart(data) {
+
+const mountCountryChart = (data) =>{
   Highcharts.chart('country-chart', {
     chart: {
       plotBackgroundColor: null,
