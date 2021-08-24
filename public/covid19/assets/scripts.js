@@ -53,7 +53,6 @@ function getData() {
     dataType: "json",
     success: function(response) {
       data = response.data
-      console.log(data);
       mountChart(data)
       mountTable(data)
       loaderHide()
@@ -81,7 +80,7 @@ function openLogInModal(){
               <input type="password" class="form-control" id="pass">
             </div>
             <div class="text-center">
-              <button type="submit" onclick="getToken()" class="btn btn-primary">Submit</button>
+              <button type="button" onclick="getToken()" class="btn btn-primary">Submit</button>
             </div>
           </form>
         </div>
@@ -99,8 +98,13 @@ const getInfoByCountry = (country) =>{
     dataType: "json",
     success:  (response) =>{
       mountModal(response.data)
-      mountCountryChart(response.data)
-      showModal()
+      if(response.data.confirmed == undefined){
+        NoData("Sin datos para mostrar")
+        showModal()
+      }else{
+        mountCountryChart(response.data)
+        showModal()
+      } 
     }
   });
 }
@@ -110,6 +114,12 @@ const showModal = () =>{
   let myModal = new bootstrap.Modal(modal)
   myModal.show()
 }
+
+function NoData (mensaje) {
+  document.getElementsByClassName("modal-body")[0].innerHTML = `<h5 class="text-center">${mensaje}</h5>`
+  document.getElementsByClassName("modal-title")[0].innerHTML = "País"
+}
+
 
 const mountModal = (data) =>{
   let modal = `
@@ -128,6 +138,44 @@ const mountModal = (data) =>{
   `
   $('#modal').html(modal)
 }
+
+function getToken() {
+    let user = $("#email").val()
+    let pass = $("#pass").val()
+    $.ajax({
+      type: "post",
+      url: "http://localhost:3000/api/login",
+      data: {email: user, password: pass},
+      dataType: "json",
+      success: function (response) {
+        localStorage.setItem('jwt', response.token)
+        window.location.replace('http://localhost:3000/covid19')
+      }
+    }).fail( function() {
+      alert('Usuario y/o password incorrectos');
+      $("#email").val("")
+      $("#pass").val("")
+
+  });
+}
+
+function getData() {
+  loaderShow()
+  $.ajax({
+    type: "get",
+    url: 'http://localhost:3000/api/total',
+    dataType: "json",
+    success: function (response) {
+      data = response.data
+      console.log(data);
+      mountChart(data)
+      mountTable(data)
+      loaderHide()
+    }
+  });
+}
+
+
 
 const loaderShow = () => {
   $('body').prepend(`
@@ -198,15 +246,20 @@ const mountTable = (data) => {
     $('#tbody').append(`
       <tr>
         <td>${d.location}</td>
-        <td>${d.active}</td>
-        <td>${d.confirmed}</td>
-        <td>${d.deaths}</td>
-        <td>${d.recovered}</td>
-        <td><button data-country="${d.location}" type="button" class="btn btn-success">Ver detalle</button></td>
+        <td class="text-center">${d.active}</td>
+        <td class="text-center">${numberconpunto(d.confirmed)}</td>
+        <td class="text-center">${numberconpunto(d.deaths)}</td>
+        <td class="text-center">${d.recovered}</td>
+        <td class="text-center"><button data-country="${d.location}" type="button" class="btn btn-success">Ver detalle</button></td>
       </tr>
     `)
   })
 }
+
+function numberconpunto(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
 
 const mountCountryChart = (data) =>{
   Highcharts.chart('country-chart', {
@@ -251,3 +304,4 @@ const mountCountryChart = (data) =>{
     }]  
   })
 }
+
