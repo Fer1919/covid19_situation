@@ -45,7 +45,7 @@ function openLogInModal() {
               <input type="password" class="form-control" id="pass">
             </div>
             <div class="text-center">
-              <button type="submit" onclick="getToken()" class="btn btn-primary">Submit</button>
+              <button type="button" onclick="getToken()" class="btn btn-primary">Submit</button>
             </div>
           </form>
         </div>
@@ -104,16 +104,22 @@ function mountModal(data) {
 }
 
 function getToken() {
-  let user = $("#email").val()
-  let pass = $("#pass").val()
-  $.ajax({
-    type: "post",
-    url: "http://localhost:3000/api/login",
-    data: {email: user, password: pass},
-    dataType: "json",
-    success: function (response) {
-      localStorage.setItem('jwt', response.token)
-    }
+    let user = $("#email").val()
+    let pass = $("#pass").val()
+    $.ajax({
+      type: "post",
+      url: "http://localhost:3000/api/login",
+      data: {email: user, password: pass},
+      dataType: "json",
+      success: function (response) {
+        localStorage.setItem('jwt', response.token)
+        window.location.replace('http://localhost:3000/covid19')
+      }
+    }).fail( function() {
+      alert('Usuario y/o password incorrectos');
+      $("#email").val("")
+      $("#pass").val("")
+
   });
 }
 
@@ -203,14 +209,18 @@ function mountTable(data) {
     $('#tbody').append(`
       <tr>
         <td>${d.location}</td>
-        <td>${d.active}</td>
-        <td>${d.confirmed}</td>
-        <td>${d.deaths}</td>
-        <td>${d.recovered}</td>
-        <td><button data-country="${d.location}" type="button" class="btn btn-success">Ver detalle</button></td>
+        <td class="text-center">${d.active}</td>
+        <td class="text-center">${numberconpunto(d.confirmed)}</td>
+        <td class="text-center">${numberconpunto(d.deaths)}</td>
+        <td class="text-center">${d.recovered}</td>
+        <td class="text-center"><button data-country="${d.location}" type="button" class="btn btn-success">Ver detalle</button></td>
       </tr>
     `)
   })
+}
+
+function numberconpunto(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
 function mountCountryChart(data) {
@@ -256,3 +266,4 @@ function mountCountryChart(data) {
     }]  
   })
 }
+
