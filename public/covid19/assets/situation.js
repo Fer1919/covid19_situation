@@ -1,19 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
   getSituation()
   if(localStorage.getItem('jwt')) {
-    $('.navbar-nav').append(`<a class="nav-link" style="cursor: pointer;" id="chile" href="./situation.html">Situacion Chile</a>`)
-    $('.navbar-nav').append(`<a class="nav-link" style="cursor: pointer;" onclick="logout()" id="logout">Cerrar sesión</a>`)
+    $('.navbar-nav').append(`<li class="nav-item"><a class="nav-link" style="cursor: pointer;" id="chile" href="./situation.html">Situacion Chile</a></li>`)
+    $('.navbar-nav').append(`<li class="nav-item"><a class="nav-link" style="cursor: pointer;" onclick="logout()" id="logout">Cerrar sesión</a></li>`)
   } else {
     window.location.replace('http://localhost:3000/covid19')
   }
 })
 
-function logout() {
+const logout = () => {
   localStorage.clear()
   window.location.replace('http://localhost:3000/covid19')
 }
 
-function loaderShow() {
+const loaderShow = () => {
   $('body').prepend(`
   <div id="shadow" style="z-index: 15; width: 100vw; height: 100vh; position: absolute; background-color: black; opacity: 0.7;"></div>
   <div id="spinner" style="z-index: 20; position: absolute; top: 50%; left: 50%;">
@@ -24,12 +24,11 @@ function loaderShow() {
   `)
 }
 
-function loaderHide() {
+const loaderHide = () => {
   $('#spinner').fadeOut()
   $('#shadow').fadeOut()
 }
-
-async function getSituation() {
+const getSituation = async ()=> {
   loaderShow()
   const token = localStorage.getItem('jwt');
   try {
@@ -46,7 +45,7 @@ async function getSituation() {
   loaderHide()
 }
 
-function drawChart(confirmed, deaths, recovered) {
+const drawChart = (confirmed, deaths, recovered) => {
   let total_confirmed = _.map(confirmed.data, function(d) { return d.total })
   let total_deaths = _.map(deaths.data, function(d) { return d.total })
   let total_recovered = _.map(recovered.data, function(d) { return d.total })
